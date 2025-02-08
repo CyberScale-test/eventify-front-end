@@ -13,7 +13,8 @@ interface PermissionsAPI {
 
 const usePermissions = (): PermissionsAPI => {
   const { user } = useAuth();
-
+  // delete me when you finish
+  console.log('User Permissions:', user?.permissionsNames);
   const can = (
     entityName: string,
     action: string | CRUD_ACTION | CRUD_ACTION[],

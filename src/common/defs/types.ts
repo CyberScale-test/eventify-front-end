@@ -66,3 +66,9 @@ export interface NavItem {
   permission?: CRUD_ACTION;
   children?: NavItem[];
 }
+
+export interface ItemResponse<T> {
+  success: boolean;
+  data?: T;
+  message?: string;
+}

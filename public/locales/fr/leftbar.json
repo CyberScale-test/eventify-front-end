@@ -2,5 +2,6 @@
   "login": "Connexion",
   "logout": "Déconnexion",
   "management": "Gestion",
-  "dashboard": "Tableau de bord"
+  "dashboard": "Tableau de bord",
+  "events": "Evenements"
 }

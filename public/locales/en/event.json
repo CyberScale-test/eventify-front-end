@@ -1,0 +1,14 @@
+{
+  "common": {
+    "create_new_one": "Create a new event",
+    "edit_one": "Edit the event",
+    "items": "Events",
+    "new_one": "New event",
+    "read_all": "Event list"
+  },
+  "list": {
+    "created_at": "Event date",
+    "event_name": "Event",
+    "event_location": "Event location"
+  }
+}

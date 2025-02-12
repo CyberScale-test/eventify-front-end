@@ -6,6 +6,7 @@ import { Event } from '@modules/events/defs/types';
 import { Grid } from '@mui/material';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
 
 interface UpdateEventFormProps {
   item: Event;
@@ -22,9 +23,12 @@ const UpdateEventForm = (props: UpdateEventFormProps) => {
 
   const defaultValues: UpdateOneInput = {
     title: item.title,
-    date: item.date,
+    start_time: dayjs(),
+    end_time: dayjs(),
     location: item.location,
-    max: 0,
+    capacity: item.capacity,
+    city_id: item.city_id,
+    description: item.description,
   };
 
   return (

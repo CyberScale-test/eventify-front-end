@@ -66,7 +66,7 @@ const RHFDateSelects = (props: Props) => {
 
   useEffect(() => {
     if (day && month && year) {
-      const date = dayjs(`${year}-${month}-${day}`);
+      const date = dayjs(`${year}-${month}-${day}`).format('YYYY-MM-DD HH:mm:ss');
       setValue(name, date);
     }
   }, [day, month, year]);

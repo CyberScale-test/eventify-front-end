@@ -9,6 +9,7 @@ import Namespaces from '@common/defs/namespaces';
 import Labels from '@common/defs/labels';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
+import EventsTable from '@modules/events/components/EventsTable';
 
 const EventsPage: NextPage = () => {
   const { t } = useTranslation(['event', 'common']);
@@ -21,6 +22,7 @@ const EventsPage: NextPage = () => {
           { name: t(`event:${Labels.Events.Items}`) },
         ]}
       />
+      <EventsTable />
     </>
   );
 };

@@ -16,6 +16,8 @@ interface UpdateUserFormProps {
 const UpdateUserForm = (props: UpdateUserFormProps) => {
   const { item } = props;
   const { t } = useTranslation(['common']);
+
+  // validation schema
   const schema = Yup.object().shape({
     email: Yup.string()
       .email(t('common:email_format_incorrect'))

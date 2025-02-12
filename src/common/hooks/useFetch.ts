@@ -39,6 +39,13 @@ const useFetch = <T>() => {
       }
 
       let finalUrl = url;
+      // solution temporelle ========================
+      if (url.startsWith('/')) {
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
+        finalUrl = `${backendUrl}${url}`;
+      }
+      //= =============================================
+
       const requestOptions: RequestInit = { ...options?.request };
 
       if (options?.request?.data) {

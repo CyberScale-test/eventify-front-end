@@ -1,16 +1,45 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useContext, useMemo, useState, useEffect } from 'react';
 
-interface Data {}
+interface City {
+  id: number;
+  name: string;
+}
+interface Data {
+  cities: City[];
+}
 
-export const defaultData: Data = {};
+export const defaultData: Data = {
+  cities: [],
+};
 
 export type UseData = {
   data: Data;
   setData: React.Dispatch<React.SetStateAction<Data>>;
 };
 
-export const useData = (_newValue: Data): UseData => {
+export const useData = (initialData: Data = defaultData): UseData => {
   const [data, setData] = useState<Data>(defaultData);
+
+  // Fetch cities on component mount (maybe  i should do it else where later)
+  useEffect(() => {
+    const fetchCities = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/cities');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const result = await response.json();
+        if (result.success) {
+          setData((prevData) => ({ ...prevData, cities: result.cities }));
+        } else {
+          console.error('Failed to fetch cities:', result.errors);
+        }
+      } catch (error) {
+        console.error('Could not fetch cities:', error);
+      }
+    };
+    fetchCities();
+  }, []);
 
   return { data, setData };
 };

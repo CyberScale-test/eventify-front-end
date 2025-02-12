@@ -1,12 +1,11 @@
 import { CrudObject } from '@common/defs/types';
-import { User } from '@modules/users/defs/types';
 import { Dayjs } from 'dayjs';
 
 export interface Event extends CrudObject {
   title: string;
-  date: Dayjs | null | undefined;
+  start_time: Dayjs | null | undefined;
+  end_time: Dayjs | null | undefined;
   location: string;
-  max: number;
-  userId: string;
-  user: User;
+  capacity: number;
+  description: string;
 }

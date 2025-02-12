@@ -78,10 +78,7 @@ type RHFMultiSelectProps = SelectProps & {
   checkbox?: boolean;
   placeholder?: string;
   helperText?: React.ReactNode;
-  options: {
-    label: string;
-    value: string;
-  }[];
+  options: { label: string; value: string }[];
 };
 
 export const RHFMultiSelect = ({
@@ -97,7 +94,8 @@ export const RHFMultiSelect = ({
 }: RHFMultiSelectProps) => {
   const { control } = useFormContext();
 
-  const renderValues = (selectedIds: string[]) => {
+  const renderValues = (value: unknown) => {
+    const selectedIds = Array.isArray(value) ? value : [];
     const selectedItems = options.filter((item) => selectedIds.includes(item.value));
 
     if (!selectedItems.length && placeholder) {
@@ -127,8 +125,7 @@ export const RHFMultiSelect = ({
       control={control}
       render={({ field, fieldState: { error } }) => (
         <FormControl sx={sx}>
-          {label && <InputLabel id={name}> {label} </InputLabel>}
-
+          {label && <InputLabel id={name}>{label}</InputLabel>}
           <Select
             {...field}
             multiple
@@ -155,13 +152,11 @@ export const RHFMultiSelect = ({
                   typography: 'body2',
                 }}
               >
-                <em> {placeholder} </em>
+                <em>{placeholder}</em>
               </MenuItem>
             )}
-
             {options.map((option) => {
-              const selected = field.value.includes(option.value);
-
+              const selected = Array.isArray(field.value) && field.value.includes(option.value);
               return (
                 <MenuItem
                   key={option.value}
@@ -180,13 +175,11 @@ export const RHFMultiSelect = ({
                   }}
                 >
                   {checkbox && <Checkbox disableRipple size="small" checked={selected} />}
-
                   {option.label}
                 </MenuItem>
               );
             })}
           </Select>
-
           {(!!error || helperText) && (
             <FormHelperText error={!!error}>{error ? error?.message : helperText}</FormHelperText>
           )}

@@ -4,6 +4,8 @@ export enum ROLE {
   ADMIN = 'admin',
   USER = 'user',
   TEST = 'test',
+  PARTICIPANT = 'participant',
+  HOST = 'host',
 }
 
 export interface Permission {

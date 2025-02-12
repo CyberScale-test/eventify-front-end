@@ -1,22 +1,26 @@
 import ApiRoutes from '@common/defs/api-routes';
 import { Event } from '@modules/events/defs/types';
 import useItems, { UseItems, UseItemsOptions, defaultOptions } from '@common/hooks/useItems';
-import { Id } from '@common/defs/types';
 import { Dayjs } from 'dayjs';
 
 export interface CreateOneInput {
   title: string;
-  date: Dayjs | null | undefined;
+  description: string;
+  start_time: Dayjs | null | undefined;
+  end_time: Dayjs | null | undefined;
   location: string;
-  max: number;
-  userId: Id;
+  capacity: number;
+  city_id: number | null;
 }
 
 export interface UpdateOneInput {
   title?: string;
-  date?: Dayjs | null | undefined;
+  description: string;
+  start_time?: Dayjs | null | undefined;
+  end_time: Dayjs | null | undefined;
   location?: string;
-  max: number;
+  capacity: number;
+  city_id: number | null;
 }
 
 export type UpsertOneInput = CreateOneInput | UpdateOneInput;

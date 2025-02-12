@@ -16,11 +16,11 @@ export interface CreateOneInput {
 export interface UpdateOneInput {
   title?: string;
   description: string;
-  start_time?: Dayjs | null | undefined;
-  end_time: Dayjs | null | undefined;
+  startTime: Dayjs | null | undefined;
+  endTime: Dayjs | null | undefined;
   location?: string;
   capacity: number;
-  city_id: number | null;
+  cityId: number | null;
 }
 
 export type UpsertOneInput = CreateOneInput | UpdateOneInput;

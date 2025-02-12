@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import dayjs, { Dayjs } from 'dayjs';
 import { CrudRow } from '@common/defs/types';
 import { useDataContext } from '@common/contexts/DataContext';
+import { useRouter } from 'next/router';
 
 interface Row extends CrudRow {
   title: string;
@@ -23,6 +24,7 @@ interface Row extends CrudRow {
 const EventsTable = () => {
   const { t } = useTranslation(['event']);
   const { data } = useDataContext();
+  const router = useRouter();
   const cities = data?.cities || [];
 
   const columns: GridColumns<Row> = [
@@ -30,16 +32,20 @@ const EventsTable = () => {
       field: 'title',
       headerName: t('event:list.title'),
       flex: 1,
+      renderCell: (params) => (
+        <span
+          style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
+          onClick={() => router.push(`/events/${params.row.id}`)}
+        >
+          {params.row.title}
+        </span>
+      ),
     },
     {
       field: 'start_time',
       headerName: t('event:list.start_time'),
       type: 'dateTime',
       flex: 1,
-      renderCell: (params) =>
-        params.row.start_time
-          ? dayjs(params.row.start_time).format('DD/MM/YYYY hh:mm')
-          : 'No date available',
     },
     {
       field: 'end_time',

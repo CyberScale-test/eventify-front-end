@@ -11,9 +11,10 @@ import { CrudRow } from '@common/defs/types';
 import { useDataContext } from '@common/contexts/DataContext';
 import { useRouter } from 'next/router';
 import { Button } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useAuth from '@modules/auth/hooks/api/useAuth';
 import useApi from '@common/hooks/useApi';
+import useParticipatedEvents from '@modules/events/hooks/useParticipatedEvents';
 
 interface Row extends CrudRow {
   title: string;
@@ -31,8 +32,10 @@ const EventsTable = () => {
   const router = useRouter();
   const cities = data?.cities || [];
   const { user } = useAuth(); // the logged-in user
-  const [participatedEvents, setParticipatedEvents] = useState<number[]>([]); // for later
+  const { fetchParticipatedEvents } = useParticipatedEvents();
+  const [participatedEventIds, setParticipatedEventIds] = useState<number[]>([]); // for later
   const fetchApi = useApi();
+
   const columns: GridColumns<Row> = [
     {
       field: 'title',
@@ -84,7 +87,7 @@ const EventsTable = () => {
       flex: 1,
       renderCell: (params) => {
         const eventId = params.row.id;
-        const hasParticipated = participatedEvents.includes(eventId);
+        const hasParticipated = participatedEventIds.includes(eventId);
 
         return (
           <Button
@@ -100,6 +103,23 @@ const EventsTable = () => {
     },
   ];
 
+  useEffect(() => {
+    if (user) {
+      console.log('Fetching participated events for user:', { userId: user.id });
+      fetchParticipatedEvents(user.id)
+        .then((ids) => {
+          // Ensure ids is an array of numbers
+          const validIds = Array.isArray(ids) ? ids.filter((id) => typeof id === 'number') : [];
+          console.log('Fetched participated events:', { participatedEventIds: validIds });
+          setParticipatedEventIds(validIds); // Set only valid IDs
+        })
+        .catch((error) => {
+          console.error('Failed to fetch participated events:', error);
+          setParticipatedEventIds([]); // Reset to an empty array on error
+        });
+    }
+  }, [user, fetchParticipatedEvents]);
+
   const handleParticipate = async (eventId: number) => {
     if (!user) {
       alert('You must be logged in to participate in an event.');
@@ -107,17 +127,17 @@ const EventsTable = () => {
     }
 
     try {
+      console.log(`Attempting to participate in event ID ${eventId}`);
       const response = await fetchApi(`/events/${eventId}/participate`, {
         method: 'POST',
         data: { userId: user.id },
         displaySuccess: true,
         displayProgress: true,
       });
-
+      console.log('API response:', response);
       if (response.success) {
-        console.log('Api response', response);
         alert('You have successfully participated in the event!');
-        setParticipatedEvents((prev) => [...prev, eventId]);
+        setParticipatedEventIds((prev) => [...prev, eventId]);
       } else {
         alert(response.errors?.[0] || 'Failed to participate in the event.');
       }

@@ -269,14 +269,6 @@ const RowActionCell = <Item, CreateOneInput, UpdateOneInput>(
   const showDelete = props.showDelete ? props.showDelete(id, item) : true;
   const { can } = usePermissions();
   const router = useRouter();
-  // Delete me when you finish
-  console.log(
-    'User permissions:',
-    namespace,
-    CRUD_ACTION.READ,
-    id,
-    can(namespace, CRUD_ACTION.READ, id)
-  );
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const enabledActions =

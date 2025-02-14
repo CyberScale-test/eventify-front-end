@@ -37,11 +37,13 @@ const CreateEventForm = () => {
   };
 
   const onPostSubmit = async (
-    data: CreateOneInput,
+    _data: CreateOneInput,
     response: ItemResponse<Event>,
     _methods: UseFormReturn<CreateOneInput>
   ) => {
     if (response.success) {
+      console.log('Api response', response);
+      console.log('Request', _data);
       router.push(Routes.Events.ReadAll);
     }
   };

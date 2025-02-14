@@ -3,9 +3,6 @@ import { CRUD_ACTION, Id } from '@common/defs/types';
 export enum ROLE {
   ADMIN = 'admin',
   USER = 'user',
-  TEST = 'test',
-  PARTICIPANT = 'participant',
-  HOST = 'host',
 }
 
 export interface Permission {

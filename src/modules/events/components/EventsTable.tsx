@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import Routes from '@common/defs/routes';
 import ItemsTable from '@common/components/partials/ItemsTable';
 import useEvents, { CreateOneInput, UpdateOneInput } from '@modules/events/hooks/api/useEvents';
@@ -9,6 +10,10 @@ import dayjs, { Dayjs } from 'dayjs';
 import { CrudRow } from '@common/defs/types';
 import { useDataContext } from '@common/contexts/DataContext';
 import { useRouter } from 'next/router';
+import { Button } from '@mui/material';
+import { useState } from 'react';
+import useAuth from '@modules/auth/hooks/api/useAuth';
+import useApi from '@common/hooks/useApi';
 
 interface Row extends CrudRow {
   title: string;
@@ -20,13 +25,14 @@ interface Row extends CrudRow {
   city_name: string;
 }
 
-// what appears in browser
 const EventsTable = () => {
   const { t } = useTranslation(['event']);
   const { data } = useDataContext();
   const router = useRouter();
   const cities = data?.cities || [];
-
+  const { user } = useAuth(); // the logged-in user
+  const [participatedEvents, setParticipatedEvents] = useState<number[]>([]); // for later
+  const fetchApi = useApi();
   const columns: GridColumns<Row> = [
     {
       field: 'title',
@@ -72,7 +78,54 @@ const EventsTable = () => {
       headerName: t('event:list.city'),
       flex: 1,
     },
+    {
+      field: 'participate',
+      headerName: 'Participate',
+      flex: 1,
+      renderCell: (params) => {
+        const eventId = params.row.id;
+        const hasParticipated = participatedEvents.includes(eventId);
+
+        return (
+          <Button
+            variant="contained"
+            color={hasParticipated ? 'secondary' : 'primary'}
+            onClick={() => handleParticipate(eventId)}
+            disabled={hasParticipated} //  for later disable if already participated
+          >
+            {hasParticipated ? 'Participated' : 'Participate'}
+          </Button>
+        );
+      },
+    },
   ];
+
+  const handleParticipate = async (eventId: number) => {
+    if (!user) {
+      alert('You must be logged in to participate in an event.');
+      return;
+    }
+
+    try {
+      const response = await fetchApi(`/events/${eventId}/participate`, {
+        method: 'POST',
+        data: { userId: user.id },
+        displaySuccess: true,
+        displayProgress: true,
+      });
+
+      if (response.success) {
+        console.log('Api response', response);
+        alert('You have successfully participated in the event!');
+        setParticipatedEvents((prev) => [...prev, eventId]);
+      } else {
+        alert(response.errors?.[0] || 'Failed to participate in the event.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while participating.');
+    }
+  };
 
   const itemToRow = (item: Event): Row => {
     const city = cities.find((city) => city.id === item.cityId);

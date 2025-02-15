@@ -7,6 +7,8 @@ const Routes: CrudAppRoutes = {
   CreateOne: prefix + '/create',
   UpdateOne: prefix + '/{id}',
   DeleteOne: prefix + '/{id}',
+  MyEvents: prefix + '/my-events',
+  MyBookings: prefix + '/my-bookings',
 };
 
 export default Routes;

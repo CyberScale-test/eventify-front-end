@@ -6,46 +6,34 @@ interface PaginationMeta {
   currentPage: number;
   lastPage: number;
   totalItems: number;
-  perPage: number;
 }
 
-interface ApiResponse {
-  success: boolean;
-  data: {
-    items: Event[];
-    meta: PaginationMeta;
-  };
-  errors?: string[];
-}
-
-const useParticipatedEvents = (userId: number | undefined) => {
+const useEventsCreated = (userId: number | undefined) => {
   const fetchApi = useApi();
   const [events, setEvents] = useState<Event[]>([]);
   const [paginationMeta, setPaginationMeta] = useState<PaginationMeta | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(10);
+  const [pageSize, setPageSize] = useState<number>(20);
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         if (userId) {
-          // fetch participated events with pagination
-          const response = await fetchApi<ApiResponse>(
-            `/users/${userId}/participated-events?page=${currentPage}&perPage=${pageSize}`
+          const response = await fetchApi<{ items: Event[]; meta: PaginationMeta }>(
+            `/users/${userId}/events?page=${currentPage}&perPage=${pageSize}`
           );
-
           if (response.success) {
-            // access nested properties
+            console.log('created eventd:', response);
             setEvents(response.data?.items || []);
             setPaginationMeta(response.data?.meta || null);
           } else {
-            setError(response.errors?.[0] || 'Failed to fetch participated events');
+            setError(response.errors?.[0] || 'Failed to fetch events');
           }
         }
       } catch (err) {
-        setError((err as Error).message || 'An unexpected error occurred');
+        setError((err as Error).message);
       } finally {
         setLoading(false);
       }
@@ -57,4 +45,4 @@ const useParticipatedEvents = (userId: number | undefined) => {
   return { events, paginationMeta, loading, error, setCurrentPage, setPageSize };
 };
 
-export default useParticipatedEvents;
+export default useEventsCreated;

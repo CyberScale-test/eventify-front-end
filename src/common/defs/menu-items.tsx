@@ -4,6 +4,8 @@ import DashboardCustomizeRoundedIcon from '@mui/icons-material/DashboardCustomiz
 import Namespaces from '@common/defs/namespaces';
 import { Group } from '@mui/icons-material';
 import FestivalIcon from '@mui/icons-material/Festival';
+import TodayIcon from '@mui/icons-material/Today';
+import AirlineSeatReclineNormalIcon from '@mui/icons-material/AirlineSeatReclineNormal';
 
 export const menuItems: NavGroup[] = [
   {
@@ -29,6 +31,20 @@ export const menuItems: NavGroup[] = [
         namespace: Namespaces.Events,
         permission: CRUD_ACTION.READ,
         routes: Routes.Events,
+      },
+      {
+        text: 'My Events',
+        icon: <TodayIcon />,
+        link: '/users/my-events',
+        namespace: Namespaces.Events,
+        permission: CRUD_ACTION.READ,
+      },
+      {
+        text: 'My Bookings',
+        icon: <AirlineSeatReclineNormalIcon />,
+        link: 'users/my-bookings',
+        namespace: Namespaces.Events,
+        permission: CRUD_ACTION.READ,
       },
     ],
   },

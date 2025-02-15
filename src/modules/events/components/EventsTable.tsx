@@ -1,5 +1,5 @@
-/* eslint-disable no-alert */
-import Routes from '@common/defs/routes';
+// components/EventsTable.tsx
+import { useEffect, useState } from 'react';
 import ItemsTable from '@common/components/partials/ItemsTable';
 import useEvents, { CreateOneInput, UpdateOneInput } from '@modules/events/hooks/api/useEvents';
 import Namespaces from '@common/defs/namespaces';
@@ -11,10 +11,10 @@ import { CrudRow } from '@common/defs/types';
 import { useDataContext } from '@common/contexts/DataContext';
 import { useRouter } from 'next/router';
 import { Button } from '@mui/material';
-import { useEffect, useState } from 'react';
 import useAuth from '@modules/auth/hooks/api/useAuth';
-import useApi from '@common/hooks/useApi';
 import useParticipatedEvents from '@modules/events/hooks/useParticipatedEvents';
+import useApi from '@common/hooks/useApi';
+import Routes from '@common/defs/routes';
 
 interface Row extends CrudRow {
   title: string;
@@ -32,9 +32,20 @@ const EventsTable = () => {
   const router = useRouter();
   const cities = data?.cities || [];
   const { user } = useAuth(); // the logged-in user
-  const { fetchParticipatedEvents } = useParticipatedEvents();
-  const [participatedEventIds, setParticipatedEventIds] = useState<number[]>([]); // for later
+  const {
+    events: participatedEvents,
+    loading: participatedLoading,
+    error: participatedError,
+  } = useParticipatedEvents(user?.id);
+  const [participatedEventIds, setParticipatedEventIds] = useState<number[]>([]);
   const fetchApi = useApi();
+
+  useEffect(() => {
+    if (participatedEvents) {
+      const ids = participatedEvents.map((event) => event.id);
+      setParticipatedEventIds(ids);
+    }
+  }, [participatedEvents]);
 
   const columns: GridColumns<Row> = [
     {
@@ -63,7 +74,7 @@ const EventsTable = () => {
       flex: 1,
       renderCell: (params) =>
         params.row.end_time
-          ? dayjs(params.row.end_time).format('DD/MM/YYYY hh:mm')
+          ? dayjs(params.row.end_time).format('DD/MM/YYYY HH:mm')
           : 'No date available',
     },
     {
@@ -88,13 +99,12 @@ const EventsTable = () => {
       renderCell: (params) => {
         const eventId = params.row.id;
         const hasParticipated = participatedEventIds.includes(eventId);
-
         return (
           <Button
             variant="contained"
             color={hasParticipated ? 'secondary' : 'primary'}
             onClick={() => handleParticipate(eventId)}
-            disabled={hasParticipated} //  for later disable if already participated
+            disabled={hasParticipated} // disable if already participated
           >
             {hasParticipated ? 'Participated' : 'Participate'}
           </Button>
@@ -103,29 +113,11 @@ const EventsTable = () => {
     },
   ];
 
-  useEffect(() => {
-    if (user) {
-      console.log('Fetching participated events for user:', { userId: user.id });
-      fetchParticipatedEvents(user.id)
-        .then((ids) => {
-          // Ensure ids is an array of numbers
-          const validIds = Array.isArray(ids) ? ids.filter((id) => typeof id === 'number') : [];
-          console.log('Fetched participated events:', { participatedEventIds: validIds });
-          setParticipatedEventIds(validIds); // Set only valid IDs
-        })
-        .catch((error) => {
-          console.error('Failed to fetch participated events:', error);
-          setParticipatedEventIds([]); // Reset to an empty array on error
-        });
-    }
-  }, [user, fetchParticipatedEvents]);
-
   const handleParticipate = async (eventId: number) => {
     if (!user) {
       alert('You must be logged in to participate in an event.');
       return;
     }
-
     try {
       console.log(`Attempting to participate in event ID ${eventId}`);
       const response = await fetchApi(`/events/${eventId}/participate`, {
@@ -157,7 +149,7 @@ const EventsTable = () => {
       location: item.location,
       capacity: item.capacity,
       description: item.description,
-      city_name: city ? city.name : 'Unknownn',
+      city_name: city ? city.name : 'Unknown',
     };
   };
 

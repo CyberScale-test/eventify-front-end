@@ -21,6 +21,7 @@ import type {} from '@mui/x-data-grid-pro/themeAugmentation';
 import type {} from '@mui/x-data-grid-premium/themeAugmentation';
 import { RoutingHistoryProvider } from '@common/contexts/RoutingHistoryContext';
 import { DialogProvider } from '@common/contexts/DialogContext';
+import { NotificationProvider } from '@common/contexts/NotificationContext'; // my touch
 import { appWithTranslation } from 'next-i18next';
 import { frFR, enUS, esES } from '@mui/material/locale';
 import { getUserLanguage } from '@common/components/lib/utils/language';
@@ -42,6 +43,7 @@ const App = ({ Component, pageProps }: AppProps) => {
     </Layout>
   );
 };
+
 const AppWrapper = (props: AppProps) => {
   const [rootElement, setRootElement] = useState<HTMLElement | null>(null);
   const [theme, setTheme] = useState<Theme | null>(null);
@@ -104,9 +106,11 @@ const AppWrapper = (props: AppProps) => {
       );
     }
   }, [rootElement]);
+
   if (!theme) {
     return <LoadingScreen />;
   }
+
   return (
     <>
       <StyledEngineProvider injectFirst>
@@ -117,8 +121,12 @@ const AppWrapper = (props: AppProps) => {
             <RoutingHistoryProvider>
               <SnackbarProvider>
                 <DialogProvider>
-                  <ProgressBar />
-                  <App {...props} />
+                  <NotificationProvider>
+                    {' '}
+                    {/* my touch prettier makes put it like this */}
+                    <ProgressBar />
+                    <App {...props} />
+                  </NotificationProvider>
                 </DialogProvider>
               </SnackbarProvider>
             </RoutingHistoryProvider>

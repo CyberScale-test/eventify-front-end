@@ -1,5 +1,8 @@
 import useAuth from '@modules/auth/hooks/api/useAuth';
 import useParticipatedEvents from '@modules/events/hooks/useParticipatedEvents';
+import dayjs from 'dayjs';
+import { useNotifications } from '@common/contexts/NotificationContext';
+import { useEffect } from 'react';
 import {
   Grid,
   Typography,
@@ -9,13 +12,27 @@ import {
   Box,
   Pagination,
 } from '@mui/material';
-import dayjs from 'dayjs';
 
 const MyBookings = () => {
   const { user } = useAuth();
   const { events, paginationMeta, loading, error, setCurrentPage } = useParticipatedEvents(
     user?.id
   );
+  const { subscribeToEventChannel } = useNotifications();
+
+  useEffect(() => {
+    console.log('fetched Events:', events);
+    if (events.length > 0) {
+      const unsubscribes = events
+        .map((event) => subscribeToEventChannel(event.id))
+        .filter((unsubscribe): unsubscribe is () => void => typeof unsubscribe === 'function');
+      // this filter ensures TypeScript knows `unsubscribe` is a function thanks to deepseek
+
+      return () => {
+        unsubscribes.forEach((unsubscribe) => unsubscribe()); // now unsubscribe is always callable
+      };
+    }
+  }, [events]);
 
   if (loading) {
     return <CircularProgress />;
@@ -36,8 +53,8 @@ const MyBookings = () => {
                     {event.title}
                   </Typography>
                   <Typography variant="subtitle1" color="text.secondary">
-                    {dayjs(event.start_time).format('DD/MM/YYYY HH:mm')} -{' '}
-                    {dayjs(event.end_time).format('DD/MM/YYYY HH:mm')}
+                    {dayjs(event.startTime).format('DD/MM/YYYY')} -{' '}
+                    {dayjs(event.endTime).format('DD/MM/YYYY')}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {event.location}

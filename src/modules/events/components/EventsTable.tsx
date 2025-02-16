@@ -1,9 +1,8 @@
-// components/EventsTable.tsx
 import { useEffect, useState } from 'react';
 import ItemsTable from '@common/components/partials/ItemsTable';
-import useEvents, { CreateOneInput, UpdateOneInput } from '@modules/events/hooks/api/useEvents';
+import useEvents from '@modules/events/hooks/api/useEvents';
 import Namespaces from '@common/defs/namespaces';
-import { GridColumns } from '@mui/x-data-grid';
+import { GridColumns, GridRenderCellParams } from '@mui/x-data-grid';
 import { Event } from '@modules/events/defs/types';
 import { useTranslation } from 'react-i18next';
 import dayjs, { Dayjs } from 'dayjs';
@@ -31,7 +30,7 @@ const EventsTable = () => {
   const { data } = useDataContext();
   const router = useRouter();
   const cities = data?.cities || [];
-  const { user } = useAuth(); // the logged-in user
+  const { user } = useAuth();
   const {
     events: participatedEvents,
     loading: participatedLoading,
@@ -47,7 +46,7 @@ const EventsTable = () => {
     }
   }, [participatedEvents]);
 
-  const columns: GridColumns<Row> = [
+  const columns: GridColumns = [
     {
       field: 'title',
       headerName: t('event:list.title'),
@@ -55,7 +54,7 @@ const EventsTable = () => {
       renderCell: (params) => (
         <span
           style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
-          onClick={() => router.push(`/events/${params.row.id}`)}
+          onClick={() => router.push(`/events/show/${params.row.id}`)}
         >
           {params.row.title}
         </span>
@@ -96,15 +95,22 @@ const EventsTable = () => {
       field: 'participate',
       headerName: 'Participate',
       flex: 1,
-      renderCell: (params) => {
+      renderCell: (params: GridRenderCellParams) => {
         const eventId = params.row.id;
         const hasParticipated = participatedEventIds.includes(eventId);
+
         return (
           <Button
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent row click when clicking the button
+              handleParticipate(eventId);
+            }}
+            disabled={hasParticipated}
             variant="contained"
-            color={hasParticipated ? 'secondary' : 'primary'}
-            onClick={() => handleParticipate(eventId)}
-            disabled={hasParticipated} // disable if already participated
+            color="primary"
+            sx={{
+              pointerEvents: hasParticipated ? 'none' : 'auto',
+            }}
           >
             {hasParticipated ? 'Participated' : 'Participate'}
           </Button>
@@ -154,7 +160,7 @@ const EventsTable = () => {
   };
 
   return (
-    <ItemsTable<Event, CreateOneInput, UpdateOneInput, Row>
+    <ItemsTable
       namespace={Namespaces.Events}
       routes={Routes.Events}
       useItems={useEvents}

@@ -1,26 +1,48 @@
-## Getting Started
+# Eventify (Frontend) 🎉
 
-# Tech Stack
+**Eventify** is the frontend of an event management platform built with Next.js and React. Users can browse events, join with one click, and view real-time updates. *(Backend integration pending.)*
 
-- MUI
-- Next
-- Emotion
-- ESLint
-- Prettier
-- SWR
+![Eventify Frontend Preview]() ![Screen =>](image.png)
 
-# Setup
+---
 
-## VSCode
+## ✨ Frontend Features
 
-- Install Prettier
-- Install ESLint
+- **User Authentication UI**  
+  Clean login/registration interface (custom auth flow).
 
-## Common code
+- **Event PArticipation**  
+  - Join events instantly via a **"Participate"** button.  
 
-For each web project using an APP and an ADMIN using some common code, please create a npm package (check the starter in gitlab) and add it as a dependency to the web project.
+- **Real-Time Notifications UI**  
+  Visual alerts when event details change (e.g., Event Updated).  
 
-# Important
+- **Event Creation Form**  
+  Intuitive form for organizers to create new events.  
 
-- Regularly, and especially before pushing, do a `npm run lint` to check that everything is ok.
-- For imports, you can use absolute paths
+- **Light Design**  
+ Navigate smoothly.  
+
+---
+
+## 🛠 Tech Stack
+
+- **Framework**: Next.js (React)  
+- **State Management**: Context API and React Hooks  
+- **Routing**: Next.js Dynamic Routing  
+ 
+
+---
+
+## 🚀 Installation
+
+1. **Clone the Frontend Repository**  
+   ```bash
+   git clone [https://github.com/CyberScale-test/eventify-front-end.git]
+   cd eventify
+   npm install
+   npm run dev 
+   npm instal Dayjs
+   npm install pusher-js
+   npm install react-toastify
+   

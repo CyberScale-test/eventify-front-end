@@ -41,7 +41,8 @@
    git clone [https://github.com/CyberScale-test/eventify-front-end.git]
    cd eventify
    npm install
-   npm run dev 
+   npm run dev
+   cp .env.example .env 
    npm instal Dayjs
    npm install pusher-js
    npm install react-toastify

@@ -43,7 +43,7 @@
 ## 🚀 Installation
 
 1. **Clone the Frontend Repository**  
-   git clone [https://github.com/CyberScale-test/eventify-front-end.git]
+   git clone [https://github.com/CyberScale-test/eventify-front-end]
 2. **Enter the folder**  
    cd eventify
 3. **Install npm**  

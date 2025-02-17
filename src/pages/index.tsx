@@ -10,9 +10,6 @@ const Index: NextPage = () => {
   return (
     <>
       <PageHeader title={t('home:dashboard')} />
-      <header style={{ fontSize: '48px', textAlign: 'center', fontWeight: 'bold' }}>
-        I am Ready!
-      </header>
     </>
   );
 };

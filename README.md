@@ -1,8 +1,6 @@
 # Eventify (Frontend) 🎉
 
-**Eventify** is the frontend of an event management platform built with Next.js and React. Users can browse events, join with one click, and view real-time updates. *(Backend integration pending.)*
-
-![Eventify Frontend Preview]() ![Screen =>](image.png)
+**Eventify** is the frontend of an event management platform built with Next.js and React. Users can browse events, join with one click, and view real-time updates.
 
 ---
 
@@ -32,17 +30,46 @@
 - **Routing**: Next.js Dynamic Routing  
  
 
----
+
 
 ## 🚀 Installation
 
 1. **Clone the Frontend Repository**  
    ```bash
    git clone [https://github.com/CyberScale-test/eventify-front-end.git]
+   ```
+2. **Enter The Folder** 
+   ```bash   
    cd eventify
+   ```
+3. **Install Dependencies** 
+   ```bash   
    npm install
-   npm run dev 
-   npm instal Dayjs
-   npm install pusher-js
-   npm install react-toastify
-   
+   ``` 
+4. **Copy .env.example** 
+   ```bash   
+   cp .env.example .env
+   ```
+5. **Install Additional Packages** 
+   ```bash   
+   npm install dayjs pusher-js react-toastify
+   ```
+6. **Configure the Pusher** 
+   ```bash   
+   NEXT_PUBLIC_PUSHER_APP_KEY=your_app_key
+   NEXT_PUBLIC_PUSHER_CLUSTER=your_cluster
+   ```
+7. **Start Development Server** 
+   ```bash   
+   npm run dev
+   ```  
+  
+---
+
+  ## Screenshots From The Frontend
+
+![Events page Preview](image.png)
+
+![My Events Page Preview](<eventify my.PNG>)
+
+![My Bookings page Preview](<eventify Bookings.PNG>)

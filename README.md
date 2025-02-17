@@ -41,7 +41,6 @@
 ## 🚀 Installation
 
 1. **Clone the Frontend Repository**  
-<<<<<<< HEAD
    ```bash
    git clone [https://github.com/CyberScale-test/eventify-front-end.git]
    ```
@@ -80,21 +79,5 @@
 ![My Events Page Preview](<eventify my.PNG>)
 
 ![My Bookings page Preview](<eventify Bookings.PNG>)
-=======
-   git clone [https://github.com/CyberScale-test/eventify-front-end]
-2. **Enter the folder**  
-   cd eventify
-3. **Install npm**  
-   npm install
-4. **Run the script**  
-   npm run dev
-5. **Copy the .env.example file in your .env**  
-   cp .env.example .env
-6. **Install Dayjs**  
-   npm instal Dayjs
-7. **Install pusher**  
-   npm install pusher-js
-8. **Install toastify**  
-   npm install react-toastify
-   
->>>>>>> a46942f00c3f558f1d7934c058838a0896d86b71
+
+ 
